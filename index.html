@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Ответы финал | 6 класс</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #0f0f1a 100%);
+            font-family: 'Courier New', 'Courier', 'IBM Plex Mono', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" opacity="0.05"><path fill="none" stroke="%23d4af37" stroke-width="0.5" d="M20 20 L180 20 M20 40 L180 40 M20 60 L180 60 M20 80 L180 80 M20 100 L180 100 M20 120 L180 120 M20 140 L180 140 M20 160 L180 160 M20 180 L180 180 M40 20 L40 180 M60 20 L60 180 M80 20 L80 180 M100 20 L100 180 M120 20 L120 180 M140 20 L140 180 M160 20 L160 180"/><circle cx="100" cy="100" r="15" stroke="%23d4af37" stroke-width="0.5" fill="none"/><path d="M100 85 L100 115 M85 100 L115 100" stroke="%23d4af37" stroke-width="0.5"/></svg>');
+            background-repeat: repeat;
+            pointer-events: none;
+        }
+
+        .fullscreen-btn {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: #2c2418cc;
+            backdrop-filter: blur(8px);
+            border: 1px solid #c7a25b;
+            color: #eedbba;
+            font-family: monospace;
+            font-size: 0.9rem;
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 40px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .fullscreen-btn:active { background: #4a3a2a; transform: scale(0.96); }
+
+        .home-btn {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            background: #2c2418cc;
+            backdrop-filter: blur(8px);
+            border: 1px solid #c7a25b;
+            color: #eedbba;
+            font-family: monospace;
+            font-size: 0.85rem;
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 40px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .home-btn:active { background: #4a3a2a; transform: scale(0.96); }
+
+        .detective-case {
+            background: #2c2418;
+            background-image: radial-gradient(circle at 25% 40%, rgba(80, 70, 50, 0.3) 2%, transparent 2.5%);
+            background-size: 24px 24px;
+            border-radius: 32px;
+            box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+            border: 1px solid #b89a6b;
+            padding: 24px 16px 28px;
+            max-width: 750px;
+            width: 100%;
+            margin: 70px 0 20px;
+        }
+
+        .crime-header {
+            text-align: center;
+            margin-bottom: 28px;
+            border-bottom: 2px solid #c7a25b;
+            display: inline-block;
+            width: 100%;
+        }
+        .crime-header h1 {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 1.7rem;
+            letter-spacing: 2px;
+            color: #ecd9b4;
+            text-shadow: 3px 3px 0 #2a2418;
+        }
+        .sub {
+            color: #dbbc87;
+            font-size: 0.7rem;
+            font-family: monospace;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            margin-top: 8px;
+            background: #1f1b1480;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 40px;
+        }
+
+        .select-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+            margin: 35px 0 20px;
+        }
+        .case-btn {
+            background: #221f1a;
+            background-image: linear-gradient(145deg, #2b241c, #19150f);
+            border: 1px solid #c7a25b;
+            border-radius: 28px;
+            padding: 14px 20px;
+            min-width: 110px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 0 6px 0 #0c0a07;
+            text-align: center;
+        }
+        .case-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 #0c0a07; }
+        .case-btn span {
+            font-size: 1.9rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            display: block;
+            color: #eedbba;
+            text-shadow: 2px 2px 0 #231f18;
+        }
+
+        .badge {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 0.7rem;
+            color: #b49255;
+            border-top: 1px dashed #5f4e32;
+            padding-top: 18px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .panel { display: none; }
+        .panel.active { display: block; }
+
+        .tasks-container {
+            background: #1f1b14e0;
+            border-radius: 28px;
+            padding: 16px;
+            margin: 10px 0 20px;
+        }
+        .task-row {
+            background: #2a241c;
+            border-radius: 24px;
+            padding: 14px;
+            margin-bottom: 18px;
+        }
+        .task-title {
+            font-weight: bold;
+            color: #e2c594;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .kit-btn {
+            background: #221f1a;
+            background-image: linear-gradient(145deg, #2b241c, #19150f);
+            border: 1px solid #c7a25b;
+            border-radius: 40px;
+            padding: 12px 24px;
+            min-width: 120px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.1s;
+            box-shadow: 0 6px 0 #0c0a07;
+        }
+        .kit-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 #0c0a07; }
+        .kit-btn span {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #eedbba;
+            font-family: monospace;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 5px;
+        }
+        .back-link button {
+            background: #4a3a2a;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 48px;
+            color: #f3e3c2;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        .back-link button:active { transform: scale(0.97); }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #1f1b14;
+            border: 3px solid #c7a25b;
+            border-radius: 48px;
+            max-width: 90%;
+            width: 480px;
+            padding: 28px 20px;
+            text-align: center;
+            box-shadow: 0 20px 35px black;
+            font-family: monospace;
+        }
+        .modal-answer {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffdfb0;
+            margin: 15px 0 8px 0;
+            word-break: break-word;
+            line-height: 1.4;
+            text-align: center;
+        }
+        .modal-close {
+            background: #4a3a2a;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 60px;
+            color: #ffefcf;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+        .check-note {
+            font-size: 0.7rem;
+            color: #bda36b;
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+        }
+        .modal-img {
+            max-width: 100%;
+            border-radius: 16px;
+            margin: 12px 0;
+            border: 1px solid #bda36b;
+            background: #fef5e0;
+        }
+
+        @media (max-width: 550px) {
+            .detective-case { padding: 16px; margin-top: 70px; }
+            .case-btn span { font-size: 1.6rem; }
+            .kit-btn { padding: 10px 16px; min-width: 100px; }
+            .kit-btn span { font-size: 1rem; }
+            .task-title { font-size: 0.85rem; }
+            .modal-answer { font-size: 1.1rem; }
+            .modal-content { width: 92%; padding: 22px 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="home-btn" id="homeButton">🏠 ДОМОЙ</button>
+    <button class="fullscreen-btn" id="fullscreenBtn">⛶ ВО ВЕСЬ ЭКРАН</button>
+
+    <div class="detective-case" id="appRoot">
+
+        <!-- ===== СТАРТОВЫЙ ЭКРАН ===== -->
+        <div id="startScreen">
+            <div class="crime-header">
+                <h1>📋 ОТВЕТЫ ДЛЯ ФИНАЛА</h1>
+                <div class="sub">6 КЛАСС</div>
+            </div>
+            <div class="select-grid">
+                <div class="case-btn" data-category="6A"><span>6А</span></div>
+                <div class="case-btn" data-category="6G"><span>6Г</span></div>
+                <div class="case-btn" data-category="6L"><span>6Л</span></div>
+            </div>
+            <div class="badge">ВЫБЕРИТЕ КАТЕГОРИЮ</div>
+        </div>
+
+        <!-- ===== ЭКРАН СО СПИСКОМ ЗАДАЧ ===== -->
+        <div id="tasksScreen" class="panel">
+            <div style="text-align:center; margin-bottom:10px;">
+                <span style="font-size:1.5rem; font-weight:bold; color:#f3e3b0;" id="tasksScreenTitle"></span>
+            </div>
+            <div class="tasks-container" id="tasksContainer"></div>
+            <div class="back-link"><button id="backToStart">← НАЗАД К КАТЕГОРИЯМ</button></div>
+        </div>
+
+    </div>
+
+    <!-- ===== МОДАЛЬНОЕ ОКНО ===== -->
+    <div id="answerModal" class="modal">
+        <div class="modal-content" id="modalContent">
+            <div style="font-size:0.9rem; color:#bda36b;">ОТВЕТ</div>
+            <div id="modalDynamicArea"></div>
+            <div class="check-note">Проверьте решение ученика</div>
+            <button class="modal-close" id="closeModalBtn">ПОНЯТНО</button>
+        </div>
+    </div>
+
+    <script>
+        // ====== КАРТИНКА ДЛЯ 6Г №1 (6×6, точки и отрезки) ======
+        function generateScheme6G1() {
+            const container = document.createElement('div');
+            container.style.width = '100%';
+            container.style.display = 'flex';
+            container.style.justifyContent = 'center';
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 550;
+            canvas.height = 550;
+            canvas.style.maxWidth = '100%';
+            canvas.style.height = 'auto';
+            canvas.style.borderRadius = '16px';
+            canvas.style.border = '1px solid #bda36b';
+            canvas.style.background = '#fef7e0';
+
+            const ctx = canvas.getContext('2d');
+
+            const SIZE = 6;
+            const CELL = 64;
+            const OX = 40;
+            const OY = 40;
+
+            function toPixel(x, y) {
+                return {
+                    px: OX + x * CELL,
+                    py: OY + (SIZE - y) * CELL
+                };
+            }
+
+            // сетка
+            ctx.strokeStyle = "#a07e4e";
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= SIZE; i++) {
+                ctx.beginPath();
+                ctx.moveTo(OX + i * CELL, OY);
+                ctx.lineTo(OX + i * CELL, OY + SIZE * CELL);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(OX, OY + i * CELL);
+                ctx.lineTo(OX + SIZE * CELL, OY + i * CELL);
+                ctx.stroke();
+            }
+
+            // жирные точки
+            const points = [
+                [3, 1], [2, 2], [3, 2], [4, 2],
+                [1, 3], [2, 3], [3, 3], [4, 3], [5, 3],
+                [2, 4], [3, 4], [4, 4],
+                [3, 5]
+            ];
+            ctx.fillStyle = "#1f3a4a";
+            points.forEach(([x, y]) => {
+                const p = toPixel(x, y);
+                ctx.beginPath();
+                ctx.arc(p.px, p.py, 8, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+
+            // отрезки
+            const lines = [
+                [[0, 3], [6, 6]],
+                [[2, 2], [6, 6]],
+                [[3, 1], [5, 3]],
+                [[3, 1], [3, 5]],
+                [[0, 3], [5, 3]]
+            ];
+            ctx.strokeStyle = "#b33e2e";
+            ctx.lineWidth = 3.5;
+            lines.forEach(([p1, p2]) => {
+                const a = toPixel(p1[0], p1[1]);
+                const b = toPixel(p2[0], p2[1]);
+                ctx.beginPath();
+                ctx.moveTo(a.px, a.py);
+                ctx.lineTo(b.px, b.py);
+                ctx.stroke();
+            });
+
+            // подписи осей
+            ctx.fillStyle = "#a07e4e80";
+            ctx.font = "12px 'Courier New', monospace";
+            for (let i = 0; i <= SIZE; i++) {
+                const p = toPixel(i, 0);
+                ctx.fillText(i, p.px - 6, p.py + 18);
+                const p2 = toPixel(0, i);
+                ctx.fillText(i, p2.px - 22, p2.py + 6);
+            }
+
+            container.appendChild(canvas);
+            return container;
+        }
+
+        // ====== КАРТИНКА ДЛЯ 6Г №2 (canvas-схема) ======
+        function generateScheme6G2() {
+            const container = document.createElement('div');
+            container.style.width = '100%';
+            container.style.display = 'flex';
+            container.style.justifyContent = 'center';
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 850;
+            canvas.height = 400;
+            canvas.style.maxWidth = '100%';
+            canvas.style.height = 'auto';
+            canvas.style.borderRadius = '16px';
+            canvas.style.border = '1px solid #bda36b';
+            canvas.style.background = '#fef7e0';
+
+            const ctx = canvas.getContext('2d');
+
+            const CELL = 48;
+            const OX = 48;
+            const OY = 48;
+
+            function toPixel(x, y) {
+                return { px: OX + x * CELL, py: OY + y * CELL };
+            }
+
+            // сетка
+            ctx.strokeStyle = "#a07e4e";
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 16; i++) {
+                ctx.beginPath();
+                ctx.moveTo(OX + i * CELL, OY);
+                ctx.lineTo(OX + i * CELL, OY + 6 * CELL);
+                ctx.stroke();
+            }
+            for (let i = 0; i <= 6; i++) {
+                ctx.beginPath();
+                ctx.moveTo(OX, OY + i * CELL);
+                ctx.lineTo(OX + 16 * CELL, OY + i * CELL);
+                ctx.stroke();
+            }
+
+            function fillPoly(points, color) {
+                ctx.beginPath();
+                const p0 = toPixel(points[0][0], points[0][1]);
+                ctx.moveTo(p0.px, p0.py);
+                for (let i = 1; i < points.length; i++) {
+                    const p = toPixel(points[i][0], points[i][1]);
+                    ctx.lineTo(p.px, p.py);
+                }
+                ctx.closePath();
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            function strokePoly(points, color, width) {
+                ctx.beginPath();
+                const p0 = toPixel(points[0][0], points[0][1]);
+                ctx.moveTo(p0.px, p0.py);
+                for (let i = 1; i < points.length; i++) {
+                    const p = toPixel(points[i][0], points[i][1]);
+                    ctx.lineTo(p.px, p.py);
+                }
+                ctx.closePath();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = width;
+                ctx.stroke();
+            }
+
+            // отражённые фигуры (вверх ногами)
+            const t1 = [[1, 1], [9, 1], [8, 3]];
+            fillPoly(t1, "rgba(180,70,70,0.35)");
+            strokePoly(t1, "#b33e2e", 2.5);
+
+            const t2 = [[8, 3], [7, 5], [15, 5]];
+            fillPoly(t2, "rgba(180,70,70,0.35)");
+            strokePoly(t2, "#b33e2e", 2.5);
+
+            const q = [[14, 1], [9, 1], [8, 3], [15, 5]];
+            strokePoly(q, "#2a6b8a", 3);
+
+            const labels = [
+                { x: 1, y: 1, text: "A" },
+                { x: 9, y: 1, text: "B" },
+                { x: 8, y: 3, text: "C" },
+                { x: 7, y: 5, text: "D" },
+                { x: 15, y: 5, text: "E" },
+                { x: 14, y: 1, text: "F" }
+            ];
+            ctx.fillStyle = "#1f3a4a";
+            ctx.font = "bold 14px 'Courier New', monospace";
+            labels.forEach(l => {
+                const p = toPixel(l.x, l.y);
+                ctx.fillText(l.text, p.px + 6, p.py - 6);
+            });
+
+            container.appendChild(canvas);
+            return container;
+        }
+
+        // ====== КАРТИНКА ДЛЯ 6Г №4 (4×4, треугольник + жирные линии) ======
+        function generateScheme6G4() {
+            const container = document.createElement('div');
+            container.style.width = '100%';
+            container.style.display = 'flex';
+            container.style.justifyContent = 'center';
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 450;
+            canvas.height = 450;
+            canvas.style.maxWidth = '100%';
+            canvas.style.height = 'auto';
+            canvas.style.borderRadius = '16px';
+            canvas.style.border = '1px solid #bda36b';
+            canvas.style.background = '#fef7e0';
+
+            const ctx = canvas.getContext('2d');
+
+            const SIZE = 4;
+            const CELL = 72;
+            const OX = 36;
+            const OY = 36;
+
+            function toPixel(x, y) {
+                return {
+                    px: OX + x * CELL,
+                    py: OY + (SIZE - y) * CELL
+                };
+            }
+
+            // сетка
+            ctx.strokeStyle = "#a07e4e";
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= SIZE; i++) {
+                ctx.beginPath();
+                ctx.moveTo(OX + i * CELL, OY);
+                ctx.lineTo(OX + i * CELL, OY + SIZE * CELL);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(OX, OY + i * CELL);
+                ctx.lineTo(OX + SIZE * CELL, OY + i * CELL);
+                ctx.stroke();
+            }
+
+            function fillTriangle(p1, p2, p3, color) {
+                ctx.beginPath();
+                const a = toPixel(p1[0], p1[1]);
+                const b = toPixel(p2[0], p2[1]);
+                const c = toPixel(p3[0], p3[1]);
+                ctx.moveTo(a.px, a.py);
+                ctx.lineTo(b.px, b.py);
+                ctx.lineTo(c.px, c.py);
+                ctx.closePath();
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            function drawThickLine(p1, p2, color, width) {
+                const a = toPixel(p1[0], p1[1]);
+                const b = toPixel(p2[0], p2[1]);
+                ctx.beginPath();
+                ctx.moveTo(a.px, a.py);
+                ctx.lineTo(b.px, b.py);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = width;
+                ctx.stroke();
+            }
+
+            // треугольник (заштрихован)
+            fillTriangle([0, 0], [2, 4], [4, 2], "rgba(180,70,70,0.35)");
+
+            // жирные линии
+            drawThickLine([2, 4], [2, 1], "#b33e2e", 4);
+            drawThickLine([1, 2], [4, 2], "#b33e2e", 4);
+
+            // подписи вершин
+            ctx.fillStyle = "#1f3a4a";
+            ctx.font = "bold 16px 'Courier New', monospace";
+            const labels = [
+                { x: 0, y: 0, text: "A" },
+                { x: 2, y: 4, text: "B" },
+                { x: 4, y: 2, text: "C" },
+                { x: 2, y: 1, text: "D" },
+                { x: 1, y: 2, text: "E" }
+            ];
+            labels.forEach(l => {
+                const p = toPixel(l.x, l.y);
+                const offsetX = (l.x === 0) ? -18 : (l.x === 4 ? 6 : 6);
+                const offsetY = (l.y === 0) ? 20 : (l.y === 4 ? -8 : -8);
+                ctx.fillText(l.text, p.px + offsetX, p.py + offsetY);
+            });
+
+            // подписи осей
+            ctx.fillStyle = "#a07e4e80";
+            ctx.font = "12px 'Courier New', monospace";
+            for (let i = 0; i <= SIZE; i++) {
+                const p = toPixel(i, 0);
+                ctx.fillText(i, p.px - 6, p.py + 20);
+                const p2 = toPixel(0, i);
+                ctx.fillText(i, p2.px - 20, p2.py + 6);
+            }
+
+            container.appendChild(canvas);
+            return container;
+        }
+
+        // ====== ДАННЫЕ ======
+        const answersDB = {
+            "6A": {
+                "1": "20",
+                "2": "Вот искомый алгоритм: папа с мамой – 2 мин, папа обратно с фонариком – 1 мин, малыш с бабушкой – 10 мин, мама обратно с фонариком – 2 мин, папа с мамой – 2 мин. Всего 17 минут!",
+                "3": "218, 219, 220, 221, 222, 224, 225, 226 и 227",
+                "4": "19, 29, 39, 49, 59, 69, 79, 89, 99",
+                "5": "7, 5, 4, 3 и 1",
+                "6": "В каждого попали по одному разу."
+            },
+            "6G": {
+                "1": "special_scheme_6G_1",
+                "2": "special_scheme_6G_2",
+                "3": "Могут быть разные ответы",
+                "4": "special_scheme_6G_4",
+                "5": "Восточнее Москвы, на той же широте",
+                "6": "Могут быть разные ответы"
+            },
+            "6L": {
+                "1": "Лжет",
+                "2": "Лжет",
+                "3": "Нет"
+            }
+        };
+
+        // ====== НАВИГАЦИЯ ======
+        let currentCategory = null;
+
+        const fullBtn = document.getElementById('fullscreenBtn');
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(e => console.warn(e));
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        fullBtn.addEventListener('click', toggleFullscreen);
+
+        function goHome() {
+            currentCategory = null;
+            document.getElementById('startScreen').style.display = 'block';
+            document.getElementById('tasksScreen').classList.remove('active');
+            closeModal();
+        }
+
+        function showTasksScreen(category) {
+            currentCategory = category;
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('tasksScreen').classList.add('active');
+            const catNames = {
+                "6A": "6А",
+                "6G": "6Г",
+                "6L": "6Л"
+            };
+            document.getElementById('tasksScreenTitle').innerHTML = `6 КЛАСС — ${catNames[category] || category}`;
+
+            const container = document.getElementById('tasksContainer');
+            const data = answersDB[category];
+            if (!data) {
+                container.innerHTML = '<div class="task-row"><div class="task-title">Нет данных для этой категории</div></div>';
+                return;
+            }
+
+            const keys = Object.keys(data);
+            let html = '';
+            keys.forEach(key => {
+                html += `<div class="task-row" data-task="${key}">
+                            <div class="task-title">📌 ЗАДАЧА № ${key}</div>
+                            <button class="kit-btn showAnswerBtn" data-task="${key}" style="min-width:auto; padding:8px 20px; margin-top:6px;">
+                                <span>ПОКАЗАТЬ ОТВЕТ</span>
+                            </button>
+                         </div>`;
+            });
+            container.innerHTML = html;
+
+            document.querySelectorAll('.showAnswerBtn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const taskId = this.getAttribute('data-task');
+                    const answer = answersDB[currentCategory]?.[taskId] || 'Ответ не найден';
+                    const modalArea = document.getElementById('modalDynamicArea');
+
+                    if (answer === 'special_scheme_6G_1') {
+                        const canvasWrapper = generateScheme6G1();
+                        modalArea.innerHTML = '';
+                        modalArea.appendChild(canvasWrapper);
+                    } else if (answer === 'special_scheme_6G_2') {
+                        const canvasWrapper = generateScheme6G2();
+                        modalArea.innerHTML = '';
+                        modalArea.appendChild(canvasWrapper);
+                    } else if (answer === 'special_scheme_6G_4') {
+                        const canvasWrapper = generateScheme6G4();
+                        modalArea.innerHTML = '';
+                        modalArea.appendChild(canvasWrapper);
+                    } else {
+                        modalArea.innerHTML = `<div style="color:#f3e3c2; font-size:1.2rem; word-break:break-word;">${answer}</div>`;
+                    }
+                    document.getElementById('answerModal').style.display = 'flex';
+                });
+            });
+        }
+
+        function closeModal() {
+            document.getElementById('answerModal').style.display = 'none';
+        }
+
+        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('answerModal');
+            if (e.target === modal) closeModal();
+        });
+
+        document.querySelectorAll('.case-btn[data-category]').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const category = this.getAttribute('data-category');
+                if (category) showTasksScreen(category);
+            });
+        });
+
+        document.getElementById('backToStart').addEventListener('click', goHome);
+        document.getElementById('homeButton').addEventListener('click', goHome);
+    </script>
+</body>
+</html>
