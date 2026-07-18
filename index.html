@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Ответы финал | 6 класс</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Куратор | Cluedo</title>
     <style>
         * {
             margin: 0;
@@ -35,30 +35,18 @@
             pointer-events: none;
         }
 
-        .fullscreen-btn {
-            position: fixed;
-            top: 16px;
-            right: 16px;
-            background: #2c2418cc;
-            backdrop-filter: blur(8px);
-            border: 1px solid #c7a25b;
-            color: #eedbba;
-            font-family: monospace;
-            font-size: 0.9rem;
-            font-weight: bold;
-            padding: 6px 14px;
-            border-radius: 40px;
-            cursor: pointer;
-            z-index: 1000;
-            transition: 0.2s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-        .fullscreen-btn:active { background: #4a3a2a; transform: scale(0.96); }
-
-        .home-btn {
+        .top-buttons {
             position: fixed;
             top: 16px;
             left: 16px;
+            right: 16px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        .home-btn, .fullscreen-btn {
+            pointer-events: auto;
             background: #2c2418cc;
             backdrop-filter: blur(8px);
             border: 1px solid #c7a25b;
@@ -69,11 +57,10 @@
             padding: 6px 14px;
             border-radius: 40px;
             cursor: pointer;
-            z-index: 1000;
             transition: 0.2s;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
-        .home-btn:active { background: #4a3a2a; transform: scale(0.96); }
+        .home-btn:active, .fullscreen-btn:active { background: #4a3a2a; transform: scale(0.96); }
 
         .detective-case {
             background: #2c2418;
@@ -85,7 +72,7 @@
             padding: 24px 16px 28px;
             max-width: 750px;
             width: 100%;
-            margin: 70px 0 20px;
+            margin: 50px 0 20px;
         }
 
         .crime-header {
@@ -156,28 +143,21 @@
             font-weight: bold;
         }
 
-        .panel { display: none; }
-        .panel.active { display: block; }
-
-        .tasks-container {
-            background: #1f1b14e0;
-            border-radius: 28px;
-            padding: 16px;
-            margin: 10px 0 20px;
-        }
-        .task-row {
-            background: #2a241c;
-            border-radius: 24px;
-            padding: 14px;
-            margin-bottom: 18px;
-        }
-        .task-title {
+        .group-header {
+            text-align: center;
+            font-size: 2rem;
             font-weight: bold;
-            color: #e2c594;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
+            color: #f3e3b0;
+            text-shadow: 4px 4px 0 #2a2418;
+            margin-bottom: 15px;
         }
-
+        .kit-selection {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin: 20px 0 25px;
+        }
         .kit-btn {
             background: #221f1a;
             background-image: linear-gradient(145deg, #2b241c, #19150f);
@@ -197,6 +177,51 @@
             color: #eedbba;
             font-family: monospace;
         }
+
+        .tasks-container {
+            background: #1f1b14e0;
+            border-radius: 28px;
+            padding: 16px;
+            margin: 10px 0 20px;
+        }
+        .level-title {
+            font-size: 1.2rem;
+            color: #e2c594;
+            text-align: center;
+            font-weight: bold;
+            margin: 16px 0 12px 0;
+            letter-spacing: 2px;
+            border-bottom: 1px dashed #a6844a;
+            display: inline-block;
+            width: 100%;
+        }
+        .task-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .task-btn {
+            background: #2f2a1f;
+            border: 1px solid #c7a25b;
+            border-radius: 48px;
+            padding: 12px 20px;
+            min-width: 80px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.1s;
+            box-shadow: 0 4px 0 #0c0a07;
+        }
+        .task-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #0c0a07; }
+        .task-btn span {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #eedbba;
+        }
+
+        .panel { display: none; }
+        .panel.active { display: block; }
 
         .back-link {
             text-align: center;
@@ -234,20 +259,20 @@
             border: 3px solid #c7a25b;
             border-radius: 48px;
             max-width: 90%;
-            width: 480px;
+            width: 550px;
             padding: 28px 20px;
             text-align: center;
             box-shadow: 0 20px 35px black;
             font-family: monospace;
         }
         .modal-answer {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             font-weight: bold;
             color: #ffdfb0;
             margin: 15px 0 8px 0;
             word-break: break-word;
-            line-height: 1.4;
-            text-align: center;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
         }
         .modal-close {
             background: #4a3a2a;
@@ -266,488 +291,286 @@
             margin-top: 8px;
             letter-spacing: 0.5px;
         }
+        .chessboard {
+            display: inline-block;
+            background: #2a241c;
+            padding: 8px;
+            border-radius: 12px;
+            margin: 12px auto;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border: 2px solid #c7a25b;
+            border-radius: 8px;
+        }
         .modal-img {
             max-width: 100%;
             border-radius: 16px;
-            margin: 12px 0;
+            margin: 10px 0;
             border: 1px solid #bda36b;
             background: #fef5e0;
         }
 
         @media (max-width: 550px) {
             .detective-case { padding: 16px; margin-top: 70px; }
-            .case-btn span { font-size: 1.6rem; }
+            .group-header { font-size: 1.8rem; }
             .kit-btn { padding: 10px 16px; min-width: 100px; }
             .kit-btn span { font-size: 1rem; }
-            .task-title { font-size: 0.85rem; }
-            .modal-answer { font-size: 1.1rem; }
+            .task-btn { padding: 8px 16px; min-width: 65px; }
+            .modal-answer { font-size: 1.2rem; }
             .modal-content { width: 92%; padding: 22px 14px; }
         }
     </style>
 </head>
 <body>
-
-    <button class="home-btn" id="homeButton">🏠 ДОМОЙ</button>
-    <button class="fullscreen-btn" id="fullscreenBtn">⛶ ВО ВЕСЬ ЭКРАН</button>
-
-    <div class="detective-case" id="appRoot">
-
-        <!-- ===== СТАРТОВЫЙ ЭКРАН ===== -->
-        <div id="startScreen">
-            <div class="crime-header">
-                <h1>📋 ОТВЕТЫ ДЛЯ ФИНАЛА</h1>
-                <div class="sub">6 КЛАСС</div>
-            </div>
-            <div class="select-grid">
-                <div class="case-btn" data-category="6A"><span>6А</span></div>
-                <div class="case-btn" data-category="6G"><span>6Г</span></div>
-                <div class="case-btn" data-category="6L"><span>6Л</span></div>
-            </div>
-            <div class="badge">ВЫБЕРИТЕ КАТЕГОРИЮ</div>
-        </div>
-
-        <!-- ===== ЭКРАН СО СПИСКОМ ЗАДАЧ ===== -->
-        <div id="tasksScreen" class="panel">
-            <div style="text-align:center; margin-bottom:10px;">
-                <span style="font-size:1.5rem; font-weight:bold; color:#f3e3b0;" id="tasksScreenTitle"></span>
-            </div>
-            <div class="tasks-container" id="tasksContainer"></div>
-            <div class="back-link"><button id="backToStart">← НАЗАД К КАТЕГОРИЯМ</button></div>
-        </div>
-
+    <div class="top-buttons">
+        <button class="home-btn" id="homeButton">🏠 ДОМОЙ</button>
+        <button class="fullscreen-btn" id="fullscreenBtn">⛶ ВО ВЕСЬ ЭКРАН</button>
     </div>
 
-    <!-- ===== МОДАЛЬНОЕ ОКНО ===== -->
+    <div class="detective-case" id="appRoot">
+        <div id="startScreen">
+            <div class="crime-header">
+                <h1>МАТЕМАТИЧЕСКОЕ CLUEDO</h1>
+                <div class="sub">ПРОВЕРКА ОТВЕТОВ ДЛЯ КУРАТОРОВ</div>
+            </div>
+            <div class="select-grid">
+                <div class="case-btn" data-group="7А"><span>7 «А»</span></div>
+                <div class="case-btn" data-group="7Б"><span>7 «Б»</span></div>
+                <div class="case-btn" data-group="7В"><span>7 «В»</span></div>
+            </div>
+            <div class="badge">ВЫБЕРИТЕ КОМПЛЕКТ</div>
+        </div>
+
+        <div id="kitScreen" class="panel">
+            <div class="group-header" id="groupTitle"></div>
+            <div class="kit-selection" id="kitList"></div>
+            <div class="back-link"><button id="backToStartFromKit">← НАЗАД</button></div>
+        </div>
+
+        <div id="taskScreen" class="panel">
+            <div style="text-align:center; margin-bottom:10px;">
+                <span style="font-size:1.5rem; font-weight:bold; color:#f3e3b0;" id="taskScreenTitle"></span>
+            </div>
+            <div class="tasks-container" id="tasksContainer"></div>
+            <div class="back-link"><button id="backToKitFromTask">← НАЗАД</button></div>
+        </div>
+    </div>
+
     <div id="answerModal" class="modal">
         <div class="modal-content" id="modalContent">
-            <div style="font-size:0.9rem; color:#bda36b;">ОТВЕТ</div>
-            <div id="modalDynamicArea"></div>
-            <div class="check-note">Проверьте решение ученика</div>
+            <div style="font-size:0.9rem; color:#bda36b;">ВЕРНЫЙ ОТВЕТ</div>
+            <div class="modal-answer" id="modalAnswerText">—</div>
+            <div class="check-note">Не забудьте проверить решение</div>
             <button class="modal-close" id="closeModalBtn">ПОНЯТНО</button>
         </div>
     </div>
 
     <script>
-        // ====== КАРТИНКА ДЛЯ 6Г №1 (6×6, точки и отрезки) ======
-        function generateScheme6G1() {
-            const container = document.createElement('div');
-            container.style.width = '100%';
-            container.style.display = 'flex';
-            container.style.justifyContent = 'center';
-
+        // Функция рисования схемы 9x9 с фишками (1F = ряд 1, колонка F(6) ...)
+        function drawScheme() {
             const canvas = document.createElement('canvas');
-            canvas.width = 550;
-            canvas.height = 550;
-            canvas.style.maxWidth = '100%';
-            canvas.style.height = 'auto';
-            canvas.style.borderRadius = '16px';
-            canvas.style.border = '1px solid #bda36b';
-            canvas.style.background = '#fef7e0';
-
+            const size = 360;
+            canvas.width = size;
+            canvas.height = size;
             const ctx = canvas.getContext('2d');
-
-            const SIZE = 6;
-            const CELL = 64;
-            const OX = 40;
-            const OY = 40;
-
-            function toPixel(x, y) {
-                return {
-                    px: OX + x * CELL,
-                    py: OY + (SIZE - y) * CELL
-                };
-            }
-
-            // сетка
+            const cellSize = size / 9;
+            ctx.fillStyle = "#fef7e0";
+            ctx.fillRect(0, 0, size, size);
             ctx.strokeStyle = "#a07e4e";
             ctx.lineWidth = 1;
-            for (let i = 0; i <= SIZE; i++) {
+            for (let i = 0; i <= 9; i++) {
                 ctx.beginPath();
-                ctx.moveTo(OX + i * CELL, OY);
-                ctx.lineTo(OX + i * CELL, OY + SIZE * CELL);
+                ctx.moveTo(i * cellSize, 0);
+                ctx.lineTo(i * cellSize, size);
                 ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(OX, OY + i * CELL);
-                ctx.lineTo(OX + SIZE * CELL, OY + i * CELL);
-                ctx.stroke();
-            }
-
-            // жирные точки
-            const points = [
-                [3, 1], [2, 2], [3, 2], [4, 2],
-                [1, 3], [2, 3], [3, 3], [4, 3], [5, 3],
-                [2, 4], [3, 4], [4, 4],
-                [3, 5]
-            ];
-            ctx.fillStyle = "#1f3a4a";
-            points.forEach(([x, y]) => {
-                const p = toPixel(x, y);
-                ctx.beginPath();
-                ctx.arc(p.px, p.py, 8, 0, 2 * Math.PI);
-                ctx.fill();
-            });
-
-            // отрезки
-            const lines = [
-                [[0, 3], [6, 6]],
-                [[2, 2], [6, 6]],
-                [[3, 1], [5, 3]],
-                [[3, 1], [3, 5]],
-                [[0, 3], [5, 3]]
-            ];
-            ctx.strokeStyle = "#b33e2e";
-            ctx.lineWidth = 3.5;
-            lines.forEach(([p1, p2]) => {
-                const a = toPixel(p1[0], p1[1]);
-                const b = toPixel(p2[0], p2[1]);
-                ctx.beginPath();
-                ctx.moveTo(a.px, a.py);
-                ctx.lineTo(b.px, b.py);
-                ctx.stroke();
-            });
-
-            // подписи осей
-            ctx.fillStyle = "#a07e4e80";
-            ctx.font = "12px 'Courier New', monospace";
-            for (let i = 0; i <= SIZE; i++) {
-                const p = toPixel(i, 0);
-                ctx.fillText(i, p.px - 6, p.py + 18);
-                const p2 = toPixel(0, i);
-                ctx.fillText(i, p2.px - 22, p2.py + 6);
-            }
-
-            container.appendChild(canvas);
-            return container;
-        }
-
-        // ====== КАРТИНКА ДЛЯ 6Г №2 (canvas-схема) ======
-        function generateScheme6G2() {
-            const container = document.createElement('div');
-            container.style.width = '100%';
-            container.style.display = 'flex';
-            container.style.justifyContent = 'center';
-
-            const canvas = document.createElement('canvas');
-            canvas.width = 850;
-            canvas.height = 400;
-            canvas.style.maxWidth = '100%';
-            canvas.style.height = 'auto';
-            canvas.style.borderRadius = '16px';
-            canvas.style.border = '1px solid #bda36b';
-            canvas.style.background = '#fef7e0';
-
-            const ctx = canvas.getContext('2d');
-
-            const CELL = 48;
-            const OX = 48;
-            const OY = 48;
-
-            function toPixel(x, y) {
-                return { px: OX + x * CELL, py: OY + y * CELL };
-            }
-
-            // сетка
-            ctx.strokeStyle = "#a07e4e";
-            ctx.lineWidth = 1;
-            for (let i = 0; i <= 16; i++) {
-                ctx.beginPath();
-                ctx.moveTo(OX + i * CELL, OY);
-                ctx.lineTo(OX + i * CELL, OY + 6 * CELL);
+                ctx.moveTo(0, i * cellSize);
+                ctx.lineTo(size, i * cellSize);
                 ctx.stroke();
             }
-            for (let i = 0; i <= 6; i++) {
-                ctx.beginPath();
-                ctx.moveTo(OX, OY + i * CELL);
-                ctx.lineTo(OX + 16 * CELL, OY + i * CELL);
-                ctx.stroke();
-            }
-
-            function fillPoly(points, color) {
-                ctx.beginPath();
-                const p0 = toPixel(points[0][0], points[0][1]);
-                ctx.moveTo(p0.px, p0.py);
-                for (let i = 1; i < points.length; i++) {
-                    const p = toPixel(points[i][0], points[i][1]);
-                    ctx.lineTo(p.px, p.py);
+            const coords = ["1F", "3C", "4F", "6C", "7F"];
+            const colMap = { A:0, B:1, C:2, D:3, E:4, F:5, G:6, H:7, I:8 };
+            ctx.fillStyle = "#b33e2e";
+            for (let c of coords) {
+                let row = parseInt(c) - 1;
+                let colLetter = c.slice(1);
+                let col = colMap[colLetter];
+                if (row >= 0 && row < 9 && col >= 0 && col < 9) {
+                    ctx.beginPath();
+                    ctx.arc(col * cellSize + cellSize/2, row * cellSize + cellSize/2, cellSize * 0.3, 0, 2 * Math.PI);
+                    ctx.fillStyle = "#d9534f";
+                    ctx.fill();
+                    ctx.fillStyle = "#f7e05e";
+                    ctx.font = `bold ${cellSize * 0.4}px monospace`;
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("●", col * cellSize + cellSize/2, row * cellSize + cellSize/2);
                 }
-                ctx.closePath();
-                ctx.fillStyle = color;
-                ctx.fill();
-                ctx.stroke();
             }
-
-            function strokePoly(points, color, width) {
-                ctx.beginPath();
-                const p0 = toPixel(points[0][0], points[0][1]);
-                ctx.moveTo(p0.px, p0.py);
-                for (let i = 1; i < points.length; i++) {
-                    const p = toPixel(points[i][0], points[i][1]);
-                    ctx.lineTo(p.px, p.py);
-                }
-                ctx.closePath();
-                ctx.strokeStyle = color;
-                ctx.lineWidth = width;
-                ctx.stroke();
-            }
-
-            // отражённые фигуры (вверх ногами)
-            const t1 = [[1, 1], [9, 1], [8, 3]];
-            fillPoly(t1, "rgba(180,70,70,0.35)");
-            strokePoly(t1, "#b33e2e", 2.5);
-
-            const t2 = [[8, 3], [7, 5], [15, 5]];
-            fillPoly(t2, "rgba(180,70,70,0.35)");
-            strokePoly(t2, "#b33e2e", 2.5);
-
-            const q = [[14, 1], [9, 1], [8, 3], [15, 5]];
-            strokePoly(q, "#2a6b8a", 3);
-
-            const labels = [
-                { x: 1, y: 1, text: "A" },
-                { x: 9, y: 1, text: "B" },
-                { x: 8, y: 3, text: "C" },
-                { x: 7, y: 5, text: "D" },
-                { x: 15, y: 5, text: "E" },
-                { x: 14, y: 1, text: "F" }
-            ];
-            ctx.fillStyle = "#1f3a4a";
-            ctx.font = "bold 14px 'Courier New', monospace";
-            labels.forEach(l => {
-                const p = toPixel(l.x, l.y);
-                ctx.fillText(l.text, p.px + 6, p.py - 6);
-            });
-
-            container.appendChild(canvas);
-            return container;
+            return canvas;
         }
 
-        // ====== КАРТИНКА ДЛЯ 6Г №4 (4×4, треугольник + жирные линии) ======
-        function generateScheme6G4() {
-            const container = document.createElement('div');
-            container.style.width = '100%';
-            container.style.display = 'flex';
-            container.style.justifyContent = 'center';
-
-            const canvas = document.createElement('canvas');
-            canvas.width = 450;
-            canvas.height = 450;
-            canvas.style.maxWidth = '100%';
-            canvas.style.height = 'auto';
-            canvas.style.borderRadius = '16px';
-            canvas.style.border = '1px solid #bda36b';
-            canvas.style.background = '#fef7e0';
-
-            const ctx = canvas.getContext('2d');
-
-            const SIZE = 4;
-            const CELL = 72;
-            const OX = 36;
-            const OY = 36;
-
-            function toPixel(x, y) {
-                return {
-                    px: OX + x * CELL,
-                    py: OY + (SIZE - y) * CELL
-                };
-            }
-
-            // сетка
-            ctx.strokeStyle = "#a07e4e";
-            ctx.lineWidth = 1;
-            for (let i = 0; i <= SIZE; i++) {
-                ctx.beginPath();
-                ctx.moveTo(OX + i * CELL, OY);
-                ctx.lineTo(OX + i * CELL, OY + SIZE * CELL);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(OX, OY + i * CELL);
-                ctx.lineTo(OX + SIZE * CELL, OY + i * CELL);
-                ctx.stroke();
-            }
-
-            function fillTriangle(p1, p2, p3, color) {
-                ctx.beginPath();
-                const a = toPixel(p1[0], p1[1]);
-                const b = toPixel(p2[0], p2[1]);
-                const c = toPixel(p3[0], p3[1]);
-                ctx.moveTo(a.px, a.py);
-                ctx.lineTo(b.px, b.py);
-                ctx.lineTo(c.px, c.py);
-                ctx.closePath();
-                ctx.fillStyle = color;
-                ctx.fill();
-                ctx.stroke();
-            }
-
-            function drawThickLine(p1, p2, color, width) {
-                const a = toPixel(p1[0], p1[1]);
-                const b = toPixel(p2[0], p2[1]);
-                ctx.beginPath();
-                ctx.moveTo(a.px, a.py);
-                ctx.lineTo(b.px, b.py);
-                ctx.strokeStyle = color;
-                ctx.lineWidth = width;
-                ctx.stroke();
-            }
-
-            // треугольник (заштрихован)
-            fillTriangle([0, 0], [2, 4], [4, 2], "rgba(180,70,70,0.35)");
-
-            // жирные линии
-            drawThickLine([2, 4], [2, 1], "#b33e2e", 4);
-            drawThickLine([1, 2], [4, 2], "#b33e2e", 4);
-
-            // подписи вершин
-            ctx.fillStyle = "#1f3a4a";
-            ctx.font = "bold 16px 'Courier New', monospace";
-            const labels = [
-                { x: 0, y: 0, text: "A" },
-                { x: 2, y: 4, text: "B" },
-                { x: 4, y: 2, text: "C" },
-                { x: 2, y: 1, text: "D" },
-                { x: 1, y: 2, text: "E" }
-            ];
-            labels.forEach(l => {
-                const p = toPixel(l.x, l.y);
-                const offsetX = (l.x === 0) ? -18 : (l.x === 4 ? 6 : 6);
-                const offsetY = (l.y === 0) ? 20 : (l.y === 4 ? -8 : -8);
-                ctx.fillText(l.text, p.px + offsetX, p.py + offsetY);
-            });
-
-            // подписи осей
-            ctx.fillStyle = "#a07e4e80";
-            ctx.font = "12px 'Courier New', monospace";
-            for (let i = 0; i <= SIZE; i++) {
-                const p = toPixel(i, 0);
-                ctx.fillText(i, p.px - 6, p.py + 20);
-                const p2 = toPixel(0, i);
-                ctx.fillText(i, p2.px - 20, p2.py + 6);
-            }
-
-            container.appendChild(canvas);
-            return container;
-        }
-
-        // ====== ДАННЫЕ ======
         const answersDB = {
-            "6A": {
-                "1": "20",
-                "2": "Вот искомый алгоритм: папа с мамой – 2 мин, папа обратно с фонариком – 1 мин, малыш с бабушкой – 10 мин, мама обратно с фонариком – 2 мин, папа с мамой – 2 мин. Всего 17 минут!",
-                "3": "218, 219, 220, 221, 222, 224, 225, 226 и 227",
-                "4": "19, 29, 39, 49, 59, 69, 79, 89, 99",
-                "5": "7, 5, 4, 3 и 1",
-                "6": "В каждого попали по одному разу."
+            "7А": {
+                "1": { "1": "120", "2": "10", "3": "75", "4": "Проверить доказательство: В таблице 5 + 8 = 13 рядов. Если каждая из 10 цифр встречается ровно в 4 рядах, то общее количество 'вхождений' цифр в ряды равно 10 * 4 = 40. Но каждый ряд имеет 8 или 5 клеток, поэтому общее количество клеток равно 5*8=40. Значит, каждый ряд должен быть заполнен целиком какими-то цифрами без пропусков. Однако это невозможно, так как ряды имеют разную длину (5 и 8), и нельзя равномерно распределить 10 цифр по 13 рядам с таким условием. Противоречие.", "5": "Добрыня убил", "6": "14" },
+                "2": { "1": "Да. Мальчики переправляются вместе на другой берег. Один мальчик возвращается обратно. Солдат переправляется на другой берег. Второй мальчик возвращается на исходный берег. Далее процесс повторяется.", "2": "Поставьте по одному стулу в каждый угол и по одному посередине каждой стены. Итого 4 (угла) + 4 (середины) = 8. Но нужно 10. Значит, еще два стула поставьте в какие-то углы (тогда в этих углах будет по 2 стула). Например, в два противоположных угла по 2 стула. Тогда у каждой стены: 2 (от углов) + 1 (середина) = 3.", "3": "45°, 60°, 75°", "4": "45", "5": "На 19 метров", "6": "Между 35 и 36 листом" },
+                "3": { "1": "Воскресенье", "2": "90", "3": "8", "4": "3x10, 4x6, 6x4, 10x3", "5": "32", "6": "10" },
+                "4": { "1": "133", "2": "2520", "3": "5", "4": "Проверить корректность решения ученика", "5": "50", "6": "21" },
+                "5": { "1": "Понедельник", "2": "103", "3": "66", "4": "Проверить корректность решения ученика", "5": "9", "6": "105" },
+                "6": { "1": "Да", "2": "Достаточно назвать примерное время. В 1 час 8 минут или в 1 час 40 минут, для ответа достаточно одного", "3": "60° и 130° или 140° и 50° (для ответа достаточно назвать только одну пару)", "4": "21", "5": "64", "6": "24" }
             },
-            "6G": {
-                "1": "special_scheme_6G_1",
-                "2": "special_scheme_6G_2",
-                "3": "Могут быть разные ответы",
-                "4": "special_scheme_6G_4",
-                "5": "Восточнее Москвы, на той же широте",
-                "6": "Могут быть разные ответы"
+            "7Б": {
+                "1": { "1": "10", "2": "По принципу Дирихле из 12 чисел найдутся хотя бы два, которые дают одинаковый остаток при делении на 11, тогда их разность делится на 11, т.е. является двузначным числом с двумя одинаковыми цифрами.", "3": "Проверить решение ученика", "4": "85679 + 85679 = 171358", "5": "special_scheme", "6": "Т=8, Р=7, А=6, Н=0, С=1, П=2, О=3, И=4, В=5, К=9" },
+                "2": { "1": "Проверить решение ученика", "2": "8413", "3": "498", "4": "Он принадлежит к ночному племени и в данный момент не спит.", "5": "Надо расставить по кругу числа: 2  6  3  1/2  1/6  1/3", "6": "53" },
+                "3": { "1": "27 (пример 0,5 + 1,6 + 7,4 + 8,3 + 9,2 = 27) или 18 (пример 0,9 + 1,8 + 3,7 + 5,4 + 6,2 = 18), для ответа достаточно одного выражения", "2": "Проверить решение ученика", "3": "1237", "4": "5", "5": "Один из вариантов ответа: 1 6 2 5 3 4, обведены: 1, 2, 3, остальные варианты ответов проверять", "6": "84015, 84510, 84915" },
+                "4": { "1": "Проверить решение ученика", "2": "14", "3": "9", "4": "4", "5": "Между листами 35 и 36", "6": "26" },
+                "5": { "1": "В ближайшую пятницу в 8:00.", "2": "1,2 часа = 1 час 12 минут", "3": "30", "4": "Да", "5": "Да", "6": "5 выдр, 7 тюленей, 6 морских котиков." },
+                "6": { "1": "Проверить решение ученика", "2": "15", "3": "110", "4": "11", "5": "100", "6": "8" }
             },
-            "6L": {
-                "1": "Лжет",
-                "2": "Лжет",
-                "3": "Нет"
+            "7В": {
+                "1": { "1": "10", "2": "3", "3": "975", "4": "Леша на 4 см", "5": "Проверить решение ученика", "6": "10" },
+                "2": { "1": "64", "2": "136", "3": "34", "4": "special_image_7V_2_4", "5": "5", "6": "Три варианта ответа, достаточно одного:<br>1 = 1/3 + 1/4 + 1/6 + 1/9 + 1/12 + 1/18<br>1 = 1/3 + 1/4 + 1/6 + 1/10 + 1/12 + 1/15<br>1 = 1/3 + 1/4 + 1/9 + 1/10 + 1/12 + 1/15 + 1/18" },
+                "3": { "1": "108", "2": "special_image_7V_3_2", "3": "Решение. Сумма всех десяти цифр равна 45. Поэтому, назвав все десять букв, мы узнаем, какими буквами зашифрованы цифры 4 и 5. Исключив эти буквы и спросив про сумму остальных восьми, мы узнаем, как зашифрованы цифры 3 и 6. В каждом следующем вопросе так же будем спрашивать про сумму еще не расшифрованных букв. В результате после третьего вопроса узнаем, какими буквами зашифрованы 2 и 7, после четвёртого—1 и 8 и, наконец, после пятого узнаем, какой из оставшихся букв зашифрована цифра 9, а какой 0", "4": "98", "5": "5 минут", "6": "21" },
+                "4": { "1": "Да, УЧУЙ = 2021", "2": "2 * 505 * 2 = 2020, другой ответ так же проверить", "3": "Не получится", "4": "Проверить решение ученика", "5": "Больше всего барсуков", "6": "В первый чемодан посадить тварей весом 10, 4, 3 кг; во второй – 9, 7, 2; в третий – 8, 6, 5. Комментарий: Найти ответ (и доказать, что он единственен) можно следующим образом. Тварей с весами 10, 9 и 8 кг необходимо поместить в разные чемоданы (иначе один чемодан будет слишком тяжёлым). Далее, чтобы никто не подрался, тварь весом 2 кг необходимо поместить во второй из этих чемоданов, а тогда тварь весом 4 кг – в первый. После этого нетрудно распределить и оставшихся тварей." },
+                "5": { "1": "Слоны едят только круглые арбузы.", "2": "Вася", "3": "Проверить решение ученика", "4": "21", "5": "Например, 1, 2, 4, 8, 975360. Есть много других решений: например, 9, 18, 36, 72, 504. Есть еще другие решения", "6": "Седьмым" },
+                "6": { "1": "Да", "2": "Проверить решение ученика", "3": "Да", "4": "Проверить решение ученика", "5": "532 и 14 (532 : 14 = 38) или 215 и 43 (215 : 43 = 5). Достаточно одной пары", "6": "Путь не через Зоопарк короче в 11 раз." }
             }
         };
 
-        // ====== НАВИГАЦИЯ ======
-        let currentCategory = null;
-
         const fullBtn = document.getElementById('fullscreenBtn');
         function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(e => console.warn(e));
-            } else {
-                document.exitFullscreen();
-            }
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e=>console.warn(e));
+            else document.exitFullscreen();
         }
         fullBtn.addEventListener('click', toggleFullscreen);
 
-        function goHome() {
-            currentCategory = null;
-            document.getElementById('startScreen').style.display = 'block';
-            document.getElementById('tasksScreen').classList.remove('active');
-            closeModal();
+        let currentGroup = null, currentKit = null;
+
+        function showAnswerModal(taskId, specialScheme=false, imageFile=null) {
+            const modalDiv = document.getElementById('modalContent');
+            // Удаляем старые canvas и img
+            const oldCanvas = modalDiv.querySelector('canvas');
+            if (oldCanvas) oldCanvas.remove();
+            const oldImg = modalDiv.querySelector('.modal-img');
+            if (oldImg) oldImg.remove();
+
+            if (specialScheme) {
+                const canvas = drawScheme();
+                modalDiv.insertBefore(canvas, document.getElementById('modalAnswerText'));
+                document.getElementById('modalAnswerText').innerHTML = "Схема расстановки фишек (9×9):";
+            } else if (imageFile) {
+                const img = document.createElement('img');
+                img.src = imageFile;
+                img.className = 'modal-img';
+                modalDiv.insertBefore(img, document.getElementById('modalAnswerText'));
+                document.getElementById('modalAnswerText').innerHTML = "";
+            } else {
+                try {
+                    const answerText = answersDB[currentGroup][currentKit][taskId] || "Ответ не найден";
+                    document.getElementById('modalAnswerText').innerHTML = answerText.replace(/\n/g, '<br>');
+                } catch(e) {
+                    document.getElementById('modalAnswerText').innerHTML = "Ошибка данных";
+                }
+            }
+            document.getElementById('answerModal').style.display = 'flex';
         }
 
-        function showTasksScreen(category) {
-            currentCategory = category;
-            document.getElementById('startScreen').style.display = 'none';
-            document.getElementById('tasksScreen').classList.add('active');
-            const catNames = {
-                "6A": "6А",
-                "6G": "6Г",
-                "6L": "6Л"
-            };
-            document.getElementById('tasksScreenTitle').innerHTML = `6 КЛАСС — ${catNames[category] || category}`;
-
+        function showTaskScreen() {
+            document.getElementById('kitScreen').classList.remove('active');
+            document.getElementById('taskScreen').classList.add('active');
+            document.getElementById('taskScreenTitle').innerHTML = `${currentGroup} | КОМПЛЕКТ ${currentKit}`;
             const container = document.getElementById('tasksContainer');
-            const data = answersDB[category];
-            if (!data) {
-                container.innerHTML = '<div class="task-row"><div class="task-title">Нет данных для этой категории</div></div>';
-                return;
-            }
-
-            const keys = Object.keys(data);
-            let html = '';
-            keys.forEach(key => {
-                html += `<div class="task-row" data-task="${key}">
-                            <div class="task-title">📌 ЗАДАЧА № ${key}</div>
-                            <button class="kit-btn showAnswerBtn" data-task="${key}" style="min-width:auto; padding:8px 20px; margin-top:6px;">
-                                <span>ПОКАЗАТЬ ОТВЕТ</span>
-                            </button>
-                         </div>`;
-            });
-            container.innerHTML = html;
-
-            document.querySelectorAll('.showAnswerBtn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    const taskId = this.getAttribute('data-task');
-                    const answer = answersDB[currentCategory]?.[taskId] || 'Ответ не найден';
-                    const modalArea = document.getElementById('modalDynamicArea');
-
-                    if (answer === 'special_scheme_6G_1') {
-                        const canvasWrapper = generateScheme6G1();
-                        modalArea.innerHTML = '';
-                        modalArea.appendChild(canvasWrapper);
-                    } else if (answer === 'special_scheme_6G_2') {
-                        const canvasWrapper = generateScheme6G2();
-                        modalArea.innerHTML = '';
-                        modalArea.appendChild(canvasWrapper);
-                    } else if (answer === 'special_scheme_6G_4') {
-                        const canvasWrapper = generateScheme6G4();
-                        modalArea.innerHTML = '';
-                        modalArea.appendChild(canvasWrapper);
-                    } else {
-                        modalArea.innerHTML = `<div style="color:#f3e3c2; font-size:1.2rem; word-break:break-word;">${answer}</div>`;
+            container.innerHTML = `
+                <div class="level-title">⚔️ 1 УРОВЕНЬ</div>
+                <div class="task-buttons">
+                    <div class="task-btn" data-task="1"><span>№ 1</span></div>
+                    <div class="task-btn" data-task="2"><span>№ 2</span></div>
+                </div>
+                <div class="level-title">⚔️ 2 УРОВЕНЬ</div>
+                <div class="task-buttons">
+                    <div class="task-btn" data-task="3"><span>№ 3</span></div>
+                    <div class="task-btn" data-task="4"><span>№ 4</span></div>
+                </div>
+                <div class="level-title">⚔️ 3 УРОВЕНЬ</div>
+                <div class="task-buttons">
+                    <div class="task-btn" data-task="5"><span>№ 5</span></div>
+                    <div class="task-btn" data-task="6"><span>№ 6</span></div>
+                </div>
+            `;
+            document.querySelectorAll('.task-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const taskId = btn.getAttribute('data-task');
+                    const isSpecial = (currentGroup === "7Б" && currentKit === "1" && taskId === "5");
+                    let imageFile = null;
+                    if (currentGroup === "7В" && currentKit === "2" && taskId === "4") {
+                        imageFile = "7vk2n4.png";
+                    } else if (currentGroup === "7В" && currentKit === "3" && taskId === "2") {
+                        imageFile = "7vk3n2.png";
                     }
-                    document.getElementById('answerModal').style.display = 'flex';
+                    showAnswerModal(taskId, isSpecial, imageFile);
                 });
             });
         }
 
-        function closeModal() {
-            document.getElementById('answerModal').style.display = 'none';
+        function showKitScreen(group) {
+            currentGroup = group;
+            currentKit = null;
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('kitScreen').classList.add('active');
+            document.getElementById('taskScreen').classList.remove('active');
+            document.getElementById('groupTitle').innerHTML = group;
+            const kitContainer = document.getElementById('kitList');
+            kitContainer.innerHTML = '';
+            for (let i = 1; i <= 6; i++) {
+                const btn = document.createElement('div');
+                btn.className = 'kit-btn';
+                btn.setAttribute('data-kit', i);
+                btn.innerHTML = `<span>КОМПЛЕКТ ${i}</span>`;
+                btn.addEventListener('click', () => { if (currentGroup) { currentKit = i.toString(); showTaskScreen(); } });
+                kitContainer.appendChild(btn);
+            }
         }
 
-        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
-        window.addEventListener('click', function(e) {
+        function goHome() {
+            currentGroup = null; currentKit = null;
+            document.getElementById('startScreen').style.display = 'block';
+            document.getElementById('kitScreen').classList.remove('active');
+            document.getElementById('taskScreen').classList.remove('active');
+            const modalDiv = document.getElementById('modalContent');
+            const oldCanvas = modalDiv.querySelector('canvas');
+            if (oldCanvas) oldCanvas.remove();
+            const oldImg = modalDiv.querySelector('.modal-img');
+            if (oldImg) oldImg.remove();
+        }
+
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            const modalDiv = document.getElementById('modalContent');
+            const oldCanvas = modalDiv.querySelector('canvas');
+            if (oldCanvas) oldCanvas.remove();
+            const oldImg = modalDiv.querySelector('.modal-img');
+            if (oldImg) oldImg.remove();
+            document.getElementById('answerModal').style.display = 'none';
+        });
+        window.addEventListener('click', (e) => {
             const modal = document.getElementById('answerModal');
-            if (e.target === modal) closeModal();
+            if (e.target === modal) {
+                const modalDiv = document.getElementById('modalContent');
+                const oldCanvas = modalDiv.querySelector('canvas');
+                if (oldCanvas) oldCanvas.remove();
+                const oldImg = modalDiv.querySelector('.modal-img');
+                if (oldImg) oldImg.remove();
+                modal.style.display = 'none';
+            }
         });
 
-        document.querySelectorAll('.case-btn[data-category]').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                const category = this.getAttribute('data-category');
-                if (category) showTasksScreen(category);
-            });
+        document.querySelectorAll('.case-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => { const group = btn.getAttribute('data-group'); if (group) showKitScreen(group); });
         });
-
-        document.getElementById('backToStart').addEventListener('click', goHome);
+        document.getElementById('backToStartFromKit')?.addEventListener('click', () => goHome());
+        document.getElementById('backToKitFromTask')?.addEventListener('click', () => { if (currentGroup) showKitScreen(currentGroup); });
         document.getElementById('homeButton').addEventListener('click', goHome);
+        goHome();
     </script>
 </body>
 </html>
