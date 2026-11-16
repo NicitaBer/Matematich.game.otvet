@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Куратор | Cluedo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #0f0f1a 100%);
+            font-family: 'Courier New', 'Courier', 'IBM Plex Mono', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" opacity="0.05"><path fill="none" stroke="%23d4af37" stroke-width="0.5" d="M20 20 L180 20 M20 40 L180 40 M20 60 L180 60 M20 80 L180 80 M20 100 L180 100 M20 120 L180 120 M20 140 L180 140 M20 160 L180 160 M20 180 L180 180 M40 20 L40 180 M60 20 L60 180 M80 20 L80 180 M100 20 L100 180 M120 20 L120 180 M140 20 L140 180 M160 20 L160 180"/><circle cx="100" cy="100" r="15" stroke="%23d4af37" stroke-width="0.5" fill="none"/><path d="M100 85 L100 115 M85 100 L115 100" stroke="%23d4af37" stroke-width="0.5"/></svg>');
+            background-repeat: repeat;
+            pointer-events: none;
+        }
+
+        .top-buttons {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        .home-btn, .fullscreen-btn {
+            pointer-events: auto;
+            background: #2c2418cc;
+            backdrop-filter: blur(8px);
+            border: 1px solid #c7a25b;
+            color: #eedbba;
+            font-family: monospace;
+            font-size: 0.85rem;
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .home-btn:active, .fullscreen-btn:active { background: #4a3a2a; transform: scale(0.96); }
+
+        .detective-case {
+            background: #2c2418;
+            background-image: radial-gradient(circle at 25% 40%, rgba(80, 70, 50, 0.3) 2%, transparent 2.5%);
+            background-size: 24px 24px;
+            border-radius: 32px;
+            box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+            border: 1px solid #b89a6b;
+            padding: 24px 16px 28px;
+            max-width: 750px;
+            width: 100%;
+            margin: 50px 0 20px;
+        }
+
+        .crime-header {
+            text-align: center;
+            margin-bottom: 28px;
+            border-bottom: 2px solid #c7a25b;
+            display: inline-block;
+            width: 100%;
+        }
+        .crime-header h1 {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 1.7rem;
+            letter-spacing: 2px;
+            color: #ecd9b4;
+            text-shadow: 3px 3px 0 #2a2418;
+        }
+        .sub {
+            color: #dbbc87;
+            font-size: 0.7rem;
+            font-family: monospace;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            margin-top: 8px;
+            background: #1f1b1480;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 40px;
+        }
+
+        .select-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+            margin: 35px 0 20px;
+        }
+        .case-btn {
+            background: #221f1a;
+            background-image: linear-gradient(145deg, #2b241c, #19150f);
+            border: 1px solid #c7a25b;
+            border-radius: 28px;
+            padding: 14px 20px;
+            min-width: 110px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 0 6px 0 #0c0a07;
+            text-align: center;
+        }
+        .case-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 #0c0a07; }
+        .case-btn span {
+            font-size: 1.9rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            display: block;
+            color: #eedbba;
+            text-shadow: 2px 2px 0 #231f18;
+        }
+
+        .badge {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 0.7rem;
+            color: #b49255;
+            border-top: 1px dashed #5f4e32;
+            padding-top: 18px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .group-header {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #f3e3b0;
+            text-shadow: 4px 4px 0 #2a2418;
+            margin-bottom: 15px;
+        }
+        .kit-selection {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            margin: 20px 0 25px;
+        }
+        .kit-btn {
+            background: #221f1a;
+            background-image: linear-gradient(145deg, #2b241c, #19150f);
+            border: 1px solid #c7a25b;
+            border-radius: 32px;
+            padding: 18px 30px;
+            min-width: 180px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.1s;
+            box-shadow: 0 8px 0 #0c0a07;
+        }
+        .kit-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #0c0a07; }
+        .kit-btn span {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #eedbba;
+            font-family: monospace;
+        }
+
+        .tasks-container {
+            background: #1f1b14e0;
+            border-radius: 28px;
+            padding: 16px;
+            margin: 10px 0 20px;
+        }
+        .level-title {
+            font-size: 1.2rem;
+            color: #e2c594;
+            text-align: center;
+            font-weight: bold;
+            margin: 16px 0 12px 0;
+            letter-spacing: 2px;
+            border-bottom: 1px dashed #a6844a;
+            display: inline-block;
+            width: 100%;
+        }
+        .task-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .task-btn {
+            background: #2f2a1f;
+            border: 1px solid #c7a25b;
+            border-radius: 48px;
+            padding: 12px 20px;
+            min-width: 80px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.1s;
+            box-shadow: 0 4px 0 #0c0a07;
+        }
+        .task-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #0c0a07; }
+        .task-btn span {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #eedbba;
+        }
+
+        .panel { display: none; }
+        .panel.active { display: block; }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 5px;
+        }
+        .back-link button {
+            background: #4a3a2a;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 48px;
+            color: #f3e3c2;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        .back-link button:active { transform: scale(0.97); }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #1f1b14;
+            border: 3px solid #c7a25b;
+            border-radius: 48px;
+            max-width: 90%;
+            width: 480px;
+            padding: 28px 20px;
+            text-align: center;
+            box-shadow: 0 20px 35px black;
+            font-family: monospace;
+        }
+        .modal-answer {
+            font-size: 1.9rem;
+            font-weight: bold;
+            color: #ffdfb0;
+            margin: 15px 0 8px 0;
+            word-break: break-word;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
+        }
+        .modal-close {
+            background: #4a3a2a;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 60px;
+            color: #ffefcf;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+        .check-note {
+            font-size: 0.7rem;
+            color: #bda36b;
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+        }
+        .modal-img {
+            max-width: 100%;
+            border-radius: 16px;
+            margin: 10px 0;
+            border: 1px solid #bda36b;
+            background: #fef5e0;
+        }
+
+        @media (max-width: 550px) {
+            .detective-case { padding: 16px; margin-top: 70px; }
+            .group-header { font-size: 1.8rem; }
+            .kit-btn { padding: 12px 20px; min-width: 140px; }
+            .task-btn { padding: 8px 16px; min-width: 65px; }
+            .modal-answer { font-size: 1.5rem; }
+            .modal-content { width: 92%; padding: 22px 14px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-buttons">
+        <button class="home-btn" id="homeButton">🏠 ДОМОЙ</button>
+        <button class="fullscreen-btn" id="fullscreenBtn">⛶ ВО ВЕСЬ ЭКРАН</button>
+    </div>
+
+    <div class="detective-case" id="appRoot">
+        <div id="startScreen">
+            <div class="crime-header">
+                <h1>МАТЕМАТИЧЕСКОЕ CLUEDO</h1>
+                <div class="sub">ПРОВЕРКА ОТВЕТОВ ДЛЯ КУРАТОРОВ</div>
+            </div>
+            <div class="select-grid">
+                <div class="case-btn" data-group="6А"><span>6 «А»</span></div>
+                <div class="case-btn" data-group="6Б"><span>6 «Б»</span></div>
+                <div class="case-btn" data-group="6В"><span>6 «В»</span></div>
+            </div>
+            <div class="badge">ВЫБЕРИТЕ КОМПЛЕКТ</div>
+        </div>
+
+        <div id="kitScreen" class="panel">
+            <div class="group-header" id="groupTitle"></div>
+            <div class="kit-selection">
+                <div class="kit-btn" data-kit="1"><span>КОМПЛЕКТ 1</span></div>
+                <div class="kit-btn" data-kit="2"><span>КОМПЛЕКТ 2</span></div>
+            </div>
+            <div class="back-link"><button id="backToStartFromKit">← НАЗАД</button></div>
+        </div>
+
+        <div id="taskScreen" class="panel">
+            <div style="text-align:center; margin-bottom:10px;">
+                <span style="font-size:1.5rem; font-weight:bold; color:#f3e3b0;" id="taskScreenTitle"></span>
+            </div>
+            <div class="tasks-container" id="tasksContainer"></div>
+            <div class="back-link"><button id="backToKitFromTask">← НАЗАД</button></div>
+        </div>
+    </div>
+
+    <div id="answerModal" class="modal">
+        <div class="modal-content" id="modalContent">
+            <div style="font-size:0.9rem; color:#bda36b;">ВЕРНЫЙ ОТВЕТ</div>
+            <div id="modalAnswerContainer"></div>
+            <div class="check-note">Не забудьте проверить решение</div>
+            <button class="modal-close" id="closeModalBtn">ПОНЯТНО</button>
+        </div>
+    </div>
+
+    <script>
+        // ---------- БАЗА ОТВЕТОВ ----------
+        const answersDB = {
+            "6А": {
+                "1": {
+                    "1": "12 : 3 : 4 * 56 : 7 : 8 = 1",
+                    "2": "Суммы равны",
+                    "3": "Йог",
+                    "4": "Пасмурная",
+                    "5": "(4/3)*(5/7)=20/21, (4/3):(7/5)=20/21, (9/7)-(1/3)=20/21, (4/6)+(2/7)=20/21",
+                    "6": "5 минут"
+                },
+                "2": {
+                    "1": "Ученик должен предоставить рисунок, проверить его корректность",
+                    "2": "Первым доест Тиграша, последним — Снежок",
+                    "3": "Ученик должен предоставить доказательство, проверить его корректность",
+                    "4": "Ученик должен предоставить рисунок, проверить его корректность",
+                    "5": "21",
+                    "6": "5 рублей"
+                }
+            },
+            "6Б": {
+                "1": {
+                    "1": "За 2 часа 15 минут",
+                    "2": "Нет",
+                    "3": "30 см",
+                    "4": "800 монет",
+                    "5": "Ученик должен предоставить решение, проверить его корректность",
+                    "6": "Жёлтых 34, синих 20, красных 46"
+                },
+                "2": {
+                    "1": "Ученик должен предоставить рисунок, проверить его корректность",
+                    "2": "Ученик должен предоставить схему и решение, проверить их корректность",
+                    "3": "Ученик должен предоставить решение, проверить его корректность",
+                    "4": "special_image_6bk2n4",
+                    "5": "Пятизначных паролей возможно восемь: 12769, 96721, 14389, 98341, 32947, 74923, 78163, 36187 (для ответа достаточно одного)",
+                    "6": "Ученик должен предоставить решение, проверить его корректность"
+                }
+            },
+            "6В": {
+                "1": {
+                    "1": "53",
+                    "2": "27 (пример 0,5 + 1,6 + 7,4 + 8,3 + 9,2 = 27) и 18 (пример 0,9 + 1,8 + 3,7 + 5,4 + 6,2 = 18)",
+                    "3": "172",
+                    "4": "7/10 - длина, 1/2 - ширина, 5/14 высота",
+                    "5": "В 11 день",
+                    "6": "98"
+                },
+                "2": {
+                    "1": "Ученик должен предоставить схему, проверить ее корректность",
+                    "2": "special_image_6vk2n2",
+                    "3": "Ученик должен предоставить решение, проверить его корректность",
+                    "4": "special_image_6vk2n4",
+                    "5": "special_image_6vk2n5",
+                    "6": "Больше всего барсуков"
+                }
+            }
+        };
+
+        // --------------------------------------------------------------
+        const fullBtn = document.getElementById('fullscreenBtn');
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(e => console.warn(e));
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        fullBtn.addEventListener('click', toggleFullscreen);
+
+        let currentGroup = null;
+        let currentKit = null;
+
+        function showAnswerModal(taskId) {
+            const container = document.getElementById('modalAnswerContainer');
+            container.innerHTML = '';
+
+            let answerData = null;
+            try {
+                answerData = answersDB[currentGroup][currentKit][taskId];
+            } catch(e) {
+                answerData = "Ошибка: нет данных для этой задачи";
+            }
+
+            // Если это специальная картинка
+            if (typeof answerData === 'string' && answerData.startsWith('special_image_')) {
+                const imgName = answerData.replace('special_image_', '') + '.png';
+                const img = document.createElement('img');
+                img.src = imgName;
+                img.className = 'modal-img';
+                img.alt = 'Схема к задаче';
+                container.appendChild(img);
+            } else {
+                const answerText = document.createElement('div');
+                answerText.className = 'modal-answer';
+                answerText.innerHTML = (answerData || "Ответ не найден").replace(/\n/g, '<br>');
+                container.appendChild(answerText);
+            }
+
+            document.getElementById('answerModal').style.display = 'flex';
+        }
+
+        function showTaskScreen() {
+            document.getElementById('kitScreen').classList.remove('active');
+            document.getElementById('taskScreen').classList.add('active');
+            document.getElementById('taskScreenTitle').innerHTML = `${currentGroup} | КОМПЛЕКТ ${currentKit}`;
+            const container = document.getElementById('tasksContainer');
+            container.innerHTML = `
+                <div class="level-title">⚔️ 1 УРОВЕНЬ</div>
+                <div class="task-buttons">
+                    <div class="task-btn" data-task="1"><span>№ 1</span></div>
+                    <div class="task-btn" data-task="2"><span>№ 2</span></div>
+                </div>
+                <div class="level-title">⚔️ 2 УРОВЕНЬ</div>
+                <div class="task-buttons">
+                    <div class="task-btn" data-task="3"><span>№ 3</span></div>
+                    <div class="task-btn" data-task="4"><span>№ 4</span></div>
+                </div>
+                <div class="level-title">⚔️ 3 УРОВЕНЬ</div>
+                <div class="task-buttons">
+                    <div class="task-btn" data-task="5"><span>№ 5</span></div>
+                    <div class="task-btn" data-task="6"><span>№ 6</span></div>
+                </div>
+            `;
+            document.querySelectorAll('.task-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const taskId = btn.getAttribute('data-task');
+                    showAnswerModal(taskId);
+                });
+            });
+        }
+
+        function showKitScreen(group) {
+            currentGroup = group;
+            currentKit = null;
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('kitScreen').classList.add('active');
+            document.getElementById('taskScreen').classList.remove('active');
+            document.getElementById('groupTitle').innerHTML = group;
+        }
+
+        function goHome() {
+            currentGroup = null;
+            currentKit = null;
+            document.getElementById('startScreen').style.display = 'block';
+            document.getElementById('kitScreen').classList.remove('active');
+            document.getElementById('taskScreen').classList.remove('active');
+            document.getElementById('modalAnswerContainer').innerHTML = '';
+            document.getElementById('answerModal').style.display = 'none';
+        }
+
+        document.getElementById('closeModalBtn').addEventListener('click', () => {
+            document.getElementById('modalAnswerContainer').innerHTML = '';
+            document.getElementById('answerModal').style.display = 'none';
+        });
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('answerModal');
+            if (e.target === modal) {
+                document.getElementById('modalAnswerContainer').innerHTML = '';
+                modal.style.display = 'none';
+            }
+        });
+
+        document.querySelectorAll('.case-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const group = btn.getAttribute('data-group');
+                if (group) showKitScreen(group);
+            });
+        });
+
+        document.querySelectorAll('.kit-btn').forEach(kitBtn => {
+            kitBtn.addEventListener('click', (e) => {
+                if (!currentGroup) return;
+                currentKit = kitBtn.getAttribute('data-kit');
+                showTaskScreen();
+            });
+        });
+
+        document.getElementById('backToStartFromKit')?.addEventListener('click', () => goHome());
+        document.getElementById('backToKitFromTask')?.addEventListener('click', () => {
+            if (currentGroup) showKitScreen(currentGroup);
+        });
+        document.getElementById('homeButton').addEventListener('click', goHome);
+        goHome();
+    </script>
+</body>
+</html>
